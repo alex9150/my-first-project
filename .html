@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Árfolyam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(to bottom right, #ff8a00, #e52e71); /* Színes háttér gradient */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); /* Fehér háttér átlátszósággal */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 24px;
+            color: #666;
+        }
+        .bitcoin-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png" alt="Bitcoin Logo" class="bitcoin-logo">
+        <h1 id="bitcoinPrice">Fetching...</h1>
+        <h2>1 BTC = <span id="usdPrice">Fetching...</span> USD</h2>
+    </div>
+
+    <script>
+        function updateBitcoinPrice() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://api.coindesk.com/v1/bpi/currentprice.json');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    const bitcoinPrice = response.bpi.USD.rate;
+                    document.getElementById('bitcoinPrice').textContent = `${bitcoinPrice}`;
+                    document.getElementById('usdPrice').textContent = `${bitcoinPrice}`;
+                } else {
+                    console.error('Hiba történt a Bitcoin árfolyamának lekérése közben.');
+                }
+            };
+            xhr.send();
+        }
+
+        updateBitcoinPrice();
+        setInterval(updateBitcoinPrice, 1000); // Frissítés minden másodpercben
+    </script>
+</body>
+</html>
